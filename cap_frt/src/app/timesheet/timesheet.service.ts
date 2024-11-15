@@ -12,18 +12,34 @@ import { EmployeeTimeZone } from './team-timezone.interface';
     constructor(private http: HttpClient) { }
   
     saveEmployeeTimeZone(employeeTimeZone: EmployeeTimeZone): Observable<EmployeeTimeZone> {
-        return this.http.post<EmployeeTimeZone>(this.apiUrl, employeeTimeZone); // no '/save'
-      }
+      // Format the time strings before sending to backend
+      const formattedData = {
+          ...employeeTimeZone,
+          workingHoursStart: this.formatTimeForBackend(employeeTimeZone.workingHoursStart),
+          workingHoursEnd: this.formatTimeForBackend(employeeTimeZone.workingHoursEnd)
+      };
+      return this.http.post<EmployeeTimeZone>(this.apiUrl, formattedData);
+  }
       
     submitEmployeeTimeZone(employeeTimeZone: EmployeeTimeZone): Observable<EmployeeTimeZone> {
       return this.http.post<EmployeeTimeZone>(this.apiUrl, employeeTimeZone);
     }
   
     updateEmployeeTimeZone(employeeId: number, employeeTimeZone: EmployeeTimeZone): Observable<EmployeeTimeZone> {
-      return this.http.put<EmployeeTimeZone>(`${this.apiUrl}/${employeeId}`, employeeTimeZone);
-    }
+      const formattedData = {
+          ...employeeTimeZone,
+          workingHoursStart: this.formatTimeForBackend(employeeTimeZone.workingHoursStart),
+          workingHoursEnd: this.formatTimeForBackend(employeeTimeZone.workingHoursEnd)
+      };
+      return this.http.put<EmployeeTimeZone>(`${this.apiUrl}/${employeeId}`, formattedData);
+  }
   
-    getEmployeeTimeZone(employeeId: number): Observable<EmployeeTimeZone> {
-      return this.http.get<EmployeeTimeZone>(`${this.apiUrl}/${employeeId}`);
-    }
+  getEmployeeTimeZone(employeeId: number): Observable<EmployeeTimeZone> {
+    return this.http.get<EmployeeTimeZone>(`${this.apiUrl}/${employeeId}`);
+}
+
+private formatTimeForBackend(time: string): string {
+  // Ensure time is in HH:mm format
+  return time.substring(0, 5);
+}
   }

@@ -1,7 +1,8 @@
+import { Employee } from "../team-dashboard/employee.model";
 
 
 export interface EmployeeTimeZone {
-  id:number,
+
     isSubmitted: boolean;
     employeeId: number;
     timeZone: string;

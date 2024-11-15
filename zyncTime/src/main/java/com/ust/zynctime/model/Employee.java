@@ -1,5 +1,6 @@
 package com.ust.zynctime.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -21,9 +22,9 @@ import java.util.stream.Collectors;
 @ToString
 public class Employee implements UserDetails {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id; // Primary key for Employee
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    private long id; // Primary key for Employee
 
     @Column(nullable = false)
     private String UserName;
@@ -31,6 +32,8 @@ public class Employee implements UserDetails {
     @Column(nullable = false)
     private String name;
 
+    @Id
+    @Column(nullable = false, unique = true)
     private long employeeId; // Unique employee identifier (useful for the foreign key)
 
     @Column(nullable = false, unique = true)
@@ -61,8 +64,10 @@ public class Employee implements UserDetails {
     @Column(name = "role")
     private Set<String> roles = new HashSet<>();
 
-    @OneToOne(mappedBy = "employee")  // One-to-One relationship with EmployeeTimeZone
+    @OneToOne(mappedBy = "employee", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JsonIgnoreProperties("employee")
     private EmployeeTimeZone employeeTimeZone;
+
 
     public Employee(String email) {
         this.email = email;

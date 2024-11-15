@@ -1,5 +1,6 @@
 package com.ust.zynctime.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -14,12 +15,8 @@ import java.time.LocalTime;
 public class EmployeeTimeZone {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id; // Auto-generated ID for EmployeeTimeZone
-
-    @OneToOne
-    @JoinColumn(name = "employee_id", referencedColumnName = "id", unique = true)  // Foreign key mapping to Employee id
-    private Employee employee;  // The actual foreign key to the Employee entity
+    @Column(nullable = false, unique = true)
+    private long employeeId; // Use employeeId as the primary key and foreign key
 
     @Column(nullable = false)
     private String timeZone;
@@ -29,4 +26,9 @@ public class EmployeeTimeZone {
 
     @Column(nullable = false)
     private LocalTime workingHoursEnd;
+
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "employeeId", referencedColumnName = "employeeId", insertable = false, updatable = false)
+    @JsonIgnoreProperties({"employeeTimeZone"})
+    private Employee employee; // Link back to the Employee entity using employeeId as FK
 }

@@ -38,7 +38,15 @@ public class TimeZoneController {
     public ResponseEntity<List<EmployeeTimeZone>> getAllEmployeeTimeZones() {
         return ResponseEntity.ok(timeZoneService.getAllEmployeeTimeZones());
     }
-
+    @PutMapping("/{employeeId}")
+    public ResponseEntity<EmployeeTimeZone> updateEmployeeTimeZone(
+            @PathVariable Long employeeId,
+            @RequestBody EmployeeTimeZone employeeTimeZone) {
+        if (!employeeId.equals(employeeTimeZone.getEmployeeId())) {
+            return ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.ok(timeZoneService.saveEmployeeTimeZone(employeeTimeZone));
+    }
     @GetMapping("/overlap")
     public ResponseEntity<List<ZonedDateTime>> getOverlappingWorkingHours(
             @RequestParam List<Long> employeeIds,

@@ -82,7 +82,7 @@ export class DashboardComponent implements OnInit {
     console.log('Adding selected employees to the team', this.selectedEmployees);
 
     this.selectedEmployees.forEach(employeeId => {
-      const employee = this.employees.find(emp => emp.id === employeeId);
+      const employee = this.employees.find(emp => emp.employeeId === employeeId);
       if (employee) {
         this.teamService.addTeamMember(employee);  // Update local state of team
         this.dashboardService.addToTeam(employeeId).subscribe(

@@ -15,7 +15,6 @@ import { Employee } from '../team-dashboard/employee.model';
 })
 export class MyTeamComponent implements OnInit {
   teamMembers: Employee[] = [];
-
   currentPage: number = 1;
   totalPages: number = 1;
 
@@ -29,7 +28,6 @@ export class MyTeamComponent implements OnInit {
       this.calculateTotalPages();
     });
   }
-  
 
   calculateTotalPages() {
     const itemsPerPage = 10;  
